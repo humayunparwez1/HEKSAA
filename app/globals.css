@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+:root {
+  --heksaa-blue: #1264e8;
+  --heksaa-blue-dark: #0958d5;
+
+  --heksaa-navy: #10233f;
+
+  --heksaa-bg: #f5f9fd;
+  --heksaa-white: #ffffff;
+
+  --heksaa-blue-soft: #eaf4ff;
+  --heksaa-border: #e5edf5;
+
+  --heksaa-text: #10233f;
+  --heksaa-muted: #718096;
+
+  --heksaa-success: #19b86b;
+  --heksaa-warning: #f4a62a;
+  --heksaa-danger: #ef5350;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--heksaa-bg);
+  color: var(--heksaa-text);
+  font-family: var(--font-inter), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-jakarta), sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--heksaa-blue);
+  color: white;
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f9fd;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd8e6;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9eb2c9;
+}
+
+/* Premium shadows */
+
+.heksaa-shadow {
+  box-shadow:
+    0 25px 70px rgba(25, 75, 130, 0.09),
+    0 5px 18px rgba(25, 75, 130, 0.04);
+}
+
+.heksaa-shadow-hover {
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.heksaa-shadow-hover:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 35px 80px rgba(25, 75, 130, 0.13),
+    0 8px 22px rgba(25, 75, 130, 0.06);
+}
+
+/* Soft medical background */
+
+.heksaa-gradient {
+  background:
+    radial-gradient(
+      circle at 80% 15%,
+      rgba(42, 139, 255, 0.12),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 15% 80%,
+      rgba(70, 203, 255, 0.08),
+      transparent 30%
+    ),
+    #f5f9fd;
+}
+
+/* Subtle clinical grid */
+
+.heksaa-grid {
+  background-image:
+    linear-gradient(
+      rgba(18, 100, 232, 0.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(18, 100, 232, 0.025) 1px,
+      transparent 1px
+    );
+
+  background-size: 40px 40px;
+}
+
+/* Reduced motion accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
