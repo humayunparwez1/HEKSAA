@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { saveReportFile } from "../lib/report-file-storage";
 import {
   Activity,
   ArrowLeft,
@@ -64,13 +65,12 @@ export default function UploadPage() {
   };
 
   /*
-   * Save information about the actual uploaded report.
+   * Save basic information about the uploaded report.
    *
    * IMPORTANT:
-   * We are not putting the complete medical file into localStorage.
-   * We only store basic file metadata here.
-   *
-   * Later, this can be replaced by a secure backend upload.
+   * The complete medical file is NOT stored in localStorage.
+   * The actual File object is stored separately in IndexedDB
+   * using saveReportFile().
    */
   const saveUploadedFileInfo = (selectedFile: File) => {
     const fileInfo: UploadedFileInfo = {
@@ -161,7 +161,13 @@ export default function UploadPage() {
     localStorage.removeItem("heksaa-uploaded-file");
   };
 
-  const continueToPrivacy = () => {
+  /*
+   * Save the actual medical report before continuing.
+   *
+   * The file is stored in IndexedDB so the next stages
+   * of HEKSAA can access the real PDF/image.
+   */
+  const continueToPrivacy = async () => {
     if (!file) {
       setError(
         "Please select a medical report first."
@@ -169,15 +175,41 @@ export default function UploadPage() {
       return;
     }
 
+    setError("");
     setIsUploading(true);
 
-    /*
-     * Give the user a short premium transition before
-     * moving to the Privacy Shield.
-     */
-    setTimeout(() => {
-      window.location.href = "/privacy";
-    }, 900);
+    try {
+      const saved = await saveReportFile(file);
+
+      if (!saved) {
+        setIsUploading(false);
+
+        setError(
+          "We could not securely prepare your report. Please try again."
+        );
+
+        return;
+      }
+
+      /*
+       * Give the user a short premium transition before
+       * moving to the Privacy Shield.
+       */
+      setTimeout(() => {
+        window.location.href = "/privacy";
+      }, 900);
+    } catch (error) {
+      console.error(
+        "HEKSAA: Failed to prepare uploaded report:",
+        error
+      );
+
+      setIsUploading(false);
+
+      setError(
+        "Something went wrong while preparing your report. Please try again."
+      );
+    }
   };
 
   const formatFileSize = (bytes: number) => {
@@ -584,7 +616,7 @@ export default function UploadPage() {
                     className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white"
                   />
 
-                  Preparing Secure Upload...
+                  Securing Your Report...
                 </>
               ) : (
                 <>
@@ -691,8 +723,7 @@ export default function UploadPage() {
                       x: 0,
                     }}
                     transition={{
-                      delay:
-                        0.5 + index * 0.12,
+                      delay: 0.5 + index * 0.12,
                     }}
                     className="flex gap-4"
                   >
