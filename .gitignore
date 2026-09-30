@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *.pyo
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 # Virtual environments
 .venv/
@@ -22,6 +24,9 @@ out/
 
 # Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # OS files
 .DS_Store
@@ -39,7 +44,3 @@ test_reports/
 *.jpg
 *.jpeg
 *.png
-
-# Python tooling
-.mypy_cache/
-.ruff_cache/
